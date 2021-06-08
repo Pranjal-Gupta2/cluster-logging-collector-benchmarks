@@ -102,7 +102,7 @@ select_stress_profile() {
         number_heavy_stress_containers=2;
         heavy_containers_msg_per_sec=20000;
         number_low_stress_containers=8;
-        low_containers_msg_per_sec=1500;
+        low_containers_msg_per_sec=2000;
         number_of_log_lines_between_reports=200000;
         maximum_logfile_size=1048576;
         ;;

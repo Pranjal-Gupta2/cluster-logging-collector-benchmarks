@@ -160,7 +160,7 @@ func main() {
 			logsTotalInfo[name] = totalEntry
 
 			if reportData.totalLogsCollectedCount%reportCount == 0 {
-				report(reportData, logsCurrentInfo, logsTotalInfo)
+				report(reportData, logsCurrentInfo, logsTotalInfo, "graph.log")
 
 				// reset counting
 				logsCurrentInfo = make(map[string]logSourceInfo)
@@ -185,14 +185,14 @@ func parseLine(line string) (name string, seq int64, logTag string, hashID strin
 		pathStartIndex = strings.Index(line, "\"file\":\"")
 		if pathStartIndex == -1 {
 			err = errors.New("parseLine: cant find path start")
-			return  "", 0, "", "", err
+			return "", 0, "", "", err
 		}
 	}
 	pathStartIndex += len("\"path\":\"")
 	pathEndIndex := strings.Index(line[pathStartIndex:], "\"")
 	if pathEndIndex == -1 {
 		err = errors.New("parseLine: cant find path end")
-		return  "", 0, "", "", err
+		return "", 0, "", "", err
 	}
 
 	path := line[pathStartIndex : pathStartIndex+pathEndIndex]
@@ -201,7 +201,7 @@ func parseLine(line string) (name string, seq int64, logTag string, hashID strin
 	nameSliced := strings.Split(path, "_")
 	if len(nameSliced) < 1 {
 		err = errors.New("parseLine: can't parse _ in path")
-		return  "", 0, "", "", err
+		return "", 0, "", "", err
 	}
 
 	path = nameSliced[0]
@@ -210,27 +210,27 @@ func parseLine(line string) (name string, seq int64, logTag string, hashID strin
 
 	if len(nameSliced) < 5 {
 		err = errors.New("parseLine: can't parse / in path")
-		return  "", 0, "", "", err
+		return "", 0, "", "", err
 	}
-	if (nameSliced[3] != "containers" && nameSliced[3] != "pods") {
+	if nameSliced[3] != "containers" && nameSliced[3] != "pods" {
 		err = errors.New("parseLine: can't parse / path -> follow only  /var/log/pods ")
-		return  "", 0, "", "", err
+		return "", 0, "", "", err
 	}
-	if(name == "logstress") {
-	name = nameSliced[4]
+	if name == "logstress" {
+		name = nameSliced[4]
 	}
 	// parse sequence and hashID (from message)
 	messageStartIndex := strings.Index(line, "\"message\":\"")
 	if messageStartIndex == -1 {
 		err = errors.New("parseLine: cant find message start")
-		return  "", 0, "", "", err
+		return "", 0, "", "", err
 	}
 	messageStartIndex += len("\"message\":\"")
 
 	messageEndIndex := strings.Index(line[messageStartIndex:], "\"")
 	if messageEndIndex == -1 {
 		err = errors.New("parseLine: cant find message end")
-		return  "", 0, "", "", err
+		return "", 0, "", "", err
 	}
 	message := line[messageStartIndex : messageStartIndex+messageEndIndex]
 
@@ -238,13 +238,13 @@ func parseLine(line string) (name string, seq int64, logTag string, hashID strin
 	logSliced := strings.Split(message, " - ")
 	if len(logSliced) < 3 {
 		err = errors.New("parseLine: can't parse - in log")
-		return  "", 0, "", "", err
+		return "", 0, "", "", err
 	}
 	seqStr := strings.TrimSpace(logSliced[2])
 	seq, err = strconv.ParseInt(seqStr, 10, 0)
 	if err != nil {
 		err = errors.New("parseLine: can't parse ParseInt in log")
-		return  "", 0, "", "", err
+		return "", 0, "", "", err
 	}
 
 	// get the hashID from the log
@@ -353,6 +353,22 @@ func defaultReporter(reportData reportStatistics, logsCurrentInfo map[string]log
 			totalEntry.loggedCount-totalEntry.collectedCount,
 		)
 
+		writeToFile(outFile, entry, name, deltaTimeInSeconds)
+
 	}
 	fmt.Printf("\n\n")
+}
+
+func writeToFile(outFile string, entry logSourceInfo, containerName string, deltaTimeInSeconds int64) {
+	f, err := os.OpenFile(outFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Error("Could not open outFile")
+		log.Error(err)
+	}
+
+	f.WriteString(fmt.Sprintf("%s\t%d\t%d\t%d\n", containerName, deltaTimeInSeconds, entry.loggedCount, entry.collectedCount))
+
+	if err := f.Close(); err != nil {
+		log.Fatal(err)
+	}
 }
