@@ -113,6 +113,7 @@ select_stress_profile() {
         low_containers_msg_per_sec=1500;
         number_of_log_lines_between_reports=1000000;
         maximum_logfile_size=1048576;
+        # maximum_logfile_size=1073741824,
         ;;
       *) show_usage
         ;;
@@ -246,6 +247,3 @@ then
   print_pods_status
   print_usage_instructions
 fi
-
-
-

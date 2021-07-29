@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+
 	logger "github.com/ViaQ/cluster-logging-load-client/loadclient"
 	log "github.com/sirupsen/logrus"
 )
