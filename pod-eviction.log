@@ -1,0 +1,125 @@
+╭─ /media/sf_pranjal/observability/fluentd                                                                                                                       ✔  17:44:05
+╰─ oc get pods
+NAME                                 READY   STATUS    RESTARTS   AGE
+capturestatistics-5f59854f49-vxb54   1/1     Running   0          4h3m
+fluentd-868558ff89-2dnhp             0/1     Pending   0          2m49s
+fluentd-868558ff89-8mtdm             0/1     Error     0          4h3m
+gologfilewatcher-6b7cd9447c-ch8l9    1/1     Running   0          4h3m
+heavy-log-stress-76f86dc997-4knws    1/1     Running   0          4h3m
+heavy-log-stress-76f86dc997-779x4    1/1     Running   0          4h3m
+heavy-log-stress-76f86dc997-8m9hx    1/1     Running   0          4h3m
+heavy-log-stress-76f86dc997-gjjn5    1/1     Running   0          4h3m
+low-log-stress-5f6bff8744-49glk      1/1     Running   0          4h3m
+low-log-stress-5f6bff8744-56rvc      1/1     Running   0          4h3m
+low-log-stress-5f6bff8744-69g8z      1/1     Running   0          4h3m
+low-log-stress-5f6bff8744-g5mjs      1/1     Running   0          4h3m
+low-log-stress-5f6bff8744-gm75x      1/1     Running   0          4h3m
+low-log-stress-5f6bff8744-m4qch      1/1     Running   0          4h3m
+low-log-stress-5f6bff8744-ttjd9      1/1     Running   0          4h3m
+low-log-stress-5f6bff8744-wrrhg      1/1     Running   0          4h3m
+╭─ /media/sf_pranjal/observability/fluentd                                                                                                                       ✔  17:44:10
+╰─ oc get fluentd-868558ff89-8mtdm     
+error: the server doesn't have a resource type "fluentd-868558ff89-8mtdm"
+╭─ /media/sf_pranjal/observability/fluentd                                                                                                                     1 ↵  17:44:33
+╰─ oc describe pod fluentd-868558ff89-8mtdm
+Name:         fluentd-868558ff89-8mtdm
+Namespace:    logstress
+Priority:     0
+Node:         ip-10-0-134-16.ec2.internal/10.0.134.16
+Start Time:   Wed, 13 Oct 2021 13:50:13 +0530
+Labels:       app=fluentd
+              pod-template-hash=868558ff89
+Annotations:  k8s.v1.cni.cncf.io/network-status:
+                [{
+                    "name": "openshift-sdn",
+                    "interface": "eth0",
+                    "ips": [
+                        "10.128.2.107"
+                    ],
+                    "default": true,
+                    "dns": {}
+                }]
+              k8s.v1.cni.cncf.io/networks-status:
+                [{
+                    "name": "openshift-sdn",
+                    "interface": "eth0",
+                    "ips": [
+                        "10.128.2.107"
+                    ],
+                    "default": true,
+                    "dns": {}
+                }]
+              openshift.io/scc: privileged
+Status:       Failed
+Reason:       Evicted
+Message:      The node was low on resource: ephemeral-storage. Container fluentd was using 447764Ki, which exceeds its request of 0. 
+IP:           10.128.2.107
+IPs:
+  IP:           10.128.2.107
+Controlled By:  ReplicaSet/fluentd-868558ff89
+Containers:
+  fluentd:
+    Container ID:  cri-o://97e73c2a19ca0026cd04d4fb839e91176e6fcd9b4985c32c697a9a91f93305e7
+    Image:         pranjalgupta2199/origin-aggregated-logging:fluentd-v9.4.13
+    Image ID:      docker.io/pranjalgupta2199/origin-aggregated-logging@sha256:f2b3be3a167de21f94cd72d7809b6cc535d56b6ae7b97ccc2d12e893a6d10072
+    Port:          <none>
+    Host Port:     <none>
+    Command:
+      /bin/bash
+    Args:
+      -c
+      rm -r /var/log/containers/fluentd.stresslog; rm /var/log/containers/stress.log; echo "Installing loki plugin"; yum update -y; yum install -y gcc make autoconf; yum install -y redhat-rpm-config; echo "Apply custom pre-commands"; gem install fluent-plugin-throttle --ignore-dependencies; cp /fluentd-pre-sh/fluentd_pre.sh fluentd_pre.sh; chmod +x fluentd_pre.sh; ./fluentd_pre.sh; echo "Starting fluentd"; /usr/local/bin/fluentd -c /etc/fluentd/fluentd.conf; while true; do
+        echo ".";
+        sleep 60;
+      done;
+      
+    State:          Terminated
+      Reason:       Error
+      Exit Code:    137
+      Started:      Wed, 13 Oct 2021 13:51:50 +0530
+      Finished:     Wed, 13 Oct 2021 17:51:30 +0530
+    Ready:          False
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /etc/fluentd from config-path (rw)
+      /fluentd-pre-sh from fluentd-pre-sh (rw)
+      /var/log from varlog (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-ncfcd (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             False 
+  ContainersReady   False 
+  PodScheduled      True 
+Volumes:
+  varlog:
+    Type:          HostPath (bare host directory volume)
+    Path:          /var/log
+    HostPathType:  
+  config-path:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      fluentd-config
+    Optional:  false
+  fluentd-pre-sh:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      fluentd-pre-sh
+    Optional:  false
+  kube-api-access-ncfcd:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+    ConfigMapName:           openshift-service-ca.crt
+    ConfigMapOptional:       <nil>
+QoS Class:                   BestEffort
+Node-Selectors:              logstress=true
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason               Age        From     Message
+  ----     ------               ----       ----     -------
+  Warning  Evicted              <invalid>  kubelet  The node was low on resource: ephemeral-storage. Container fluentd was using 447764Ki, which exceeds its request of 0.
+  Normal   Killing              <invalid>  kubelet  Stopping container fluentd
+  Warning  ExceededGracePeriod  <invalid>  kubelet  Container runtime did not kill the pod within specified grace period.

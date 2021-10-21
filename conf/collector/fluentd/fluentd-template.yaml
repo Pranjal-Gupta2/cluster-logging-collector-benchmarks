@@ -49,7 +49,7 @@ objects:
               chmod +x fluentd_pre.sh;
               ./fluentd_pre.sh;
               echo "Starting fluentd";
-              /usr/local/bin/fluentd -c /etc/fluentd/fluentd.conf -v;
+              /usr/local/bin/fluentd -c /etc/fluentd/fluentd.conf;
               while true; do
                 echo ".";
                 sleep 60;

@@ -196,7 +196,7 @@ cleanup() {
 
 # print usage instructions
 print_usage_instructions () {
-  CAPTURE_STATISTICS_POD=$(oc get pod -l app=capturestatistics -o jsonpath="{.items[0].metadata.name}")
+  CAPTURE_STATISTICS_POD=$(oc get pod -l app=fluentd -o jsonpath="{.items[0].metadata.name}")
 
   echo -e "\n\nExplore logs of relevant pods ^^^"
   echo -e "Waiting for $CAPTURE_STATISTICS_POD to become ready"

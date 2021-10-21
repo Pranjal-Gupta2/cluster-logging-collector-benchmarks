@@ -59,7 +59,7 @@ select_stress_profile() {
         maximum_logfile_size=10485760;
         ;;
       "light")
-        number_heavy_stress_containers=1;
+        number_heavy_stress_containers=2;
         heavy_containers_msg_per_sec=100;
         number_low_stress_containers=2;
         low_containers_msg_per_sec=10;
@@ -104,7 +104,8 @@ select_stress_profile() {
         number_low_stress_containers=8;
         low_containers_msg_per_sec=2000;
         number_of_log_lines_between_reports=200000;
-        maximum_logfile_size=1048576;
+        # maximum_logfile_size=1048576;
+        maximum_logfile_size=1073741824,
         ;;
       "very-heavy-loss")
         number_heavy_stress_containers=10;
