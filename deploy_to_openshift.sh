@@ -46,22 +46,23 @@ select_stress_profile() {
         number_heavy_stress_containers=0;
         heavy_containers_msg_per_sec=0;
         number_low_stress_containers=1;
-        low_containers_msg_per_sec=10;
-        number_of_log_lines_between_reports=100;
+        low_containers_msg_per_sec=400;
+        number_of_log_lines_between_reports=1;
         maximum_logfile_size=10485760;
         ;;
       "light")
         number_heavy_stress_containers=1;
-        heavy_containers_msg_per_sec=100;
+        heavy_containers_msg_per_sec=1000;
         number_low_stress_containers=2;
-        low_containers_msg_per_sec=10;
+        low_containers_msg_per_sec=100;
         number_of_log_lines_between_reports=1000;
-        maximum_logfile_size=1048576;
+        # maximum_logfile_size=10737418240;
+        maximum_logfile_size=10485760;
         ;;
       "experiment")
-        number_heavy_stress_containers=0;
-        heavy_containers_msg_per_sec=0;
-        number_low_stress_containers=20;
+        number_heavy_stress_containers=100;
+        heavy_containers_msg_per_sec=100;
+        number_low_stress_containers=0;
         low_containers_msg_per_sec=20000;
         number_of_log_lines_between_reports=100;
         maximum_logfile_size=10485760;
