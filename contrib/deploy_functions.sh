@@ -68,10 +68,10 @@ deploy_logstress() {
   oc delete --ignore-not-found=true deployment low-log-stress
   oc delete --ignore-not-found=true deployment heavy-log-stress
   oc process -f $DEPLOY_YAML \
-    -p number_heavy_stress_containers="$1" \
-    -p heavy_containers_msg_per_sec="$2" \
-    -p number_low_stress_containers="$3" \
-    -p low_containers_msg_per_sec="$4" \
+    -p number_heavy_stress_containers=$1 \
+    -p heavy_containers_msg_per_sec=$2 \
+    -p number_low_stress_containers=$3 \
+    -p low_containers_msg_per_sec=$4 \
     -p use_log_samples="$5" \
     -p log_stressor_image="$6" \
     | oc apply -f -

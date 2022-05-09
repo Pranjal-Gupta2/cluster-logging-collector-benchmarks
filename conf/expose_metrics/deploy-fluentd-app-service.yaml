@@ -12,7 +12,5 @@ spec:
     targetPort: 24231
     name: web
   selector:
-    component: collector
-    logging-infra: collector
-    provider: openshift
+    app: fluentd
   type: ClusterIP

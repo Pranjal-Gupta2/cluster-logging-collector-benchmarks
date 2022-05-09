@@ -1,6 +1,5 @@
 apiVersion: v1
 kind: Template
-apiVersion: template.openshift.io/v1
 metadata:
   name: logstress
 objects:
@@ -25,8 +24,8 @@ objects:
           name: heavy-log-stress
           args:
             - generate 
-            - --log-lines-rate="${heavy_containers_msg_per_sec}"
-            - --source="${use_log_samples}"
+            - --log-lines-rate=${heavy_containers_msg_per_sec}
+            - --source=${use_log_samples}
           restartPolicy: Always
 - apiVersion: apps/v1
   kind: Deployment
@@ -49,19 +48,13 @@ objects:
           name: low-log-stress
           args:
             - generate 
-            - --log-lines-rate="${low_containers_msg_per_sec}"
-            - --source="${use_log_samples}"
+            - --log-lines-rate=${low_containers_msg_per_sec}
+            - --source=${use_log_samples}
           restartPolicy: Always
 parameters:
 - name: number_heavy_stress_containers
-  value: "0"
 - name: heavy_containers_msg_per_sec
-  value: "1000"
 - name: number_low_stress_containers
-  value: "1"
 - name: low_containers_msg_per_sec
-  value: "50"
 - name: use_log_samples
-  value: "false"
 - name: log_stressor_image
-  value: "quay.io/openshift-logging/cluster-logging-load-client:latest"
